@@ -27,12 +27,22 @@ npm install -g @wnsgur1595/llm-provider-mcp
       "command": "npx",
       "args": ["@wnsgur1595/llm-provider-mcp"],
       "env": {
-        "OPENAI_API_KEY": "your-openai-key"
+        "OPENAI_API_KEY": "your-openai-key",
+        "ANTHROPIC_API_KEY": "your-anthropic-key",
+        "GOOGLE_API_KEY": "your-google-key",
+        "PERPLEXITY_API_KEY": "your-perplexity-key",
+        
+        "OPENAI_MODEL": "gpt-4o",
+        "ANTHROPIC_MODEL": "claude-3-5-sonnet-20241022",
+        "GOOGLE_MODEL": "gemini-1.5-pro",
+        "PERPLEXITY_MODEL": "llama-3.1-sonar-small-128k-online"
       }
     }
   }
 }
 ```
+
+**참고**: 모든 API 키와 모델 설정은 선택사항입니다. 필요한 것만 설정하세요.
 
 ### 3단계: API 키 설정
 
