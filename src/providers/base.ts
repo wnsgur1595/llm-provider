@@ -39,6 +39,14 @@ export abstract class BaseProvider implements LLMProvider {
           retries: 3,
           onFailedAttempt: (error: any) => {
             logger.warn(`${this.name} query attempt failed:`, error.message);
+          },
+          // NonRetriableError는 재시도하지 않음
+          retryIf: (error: any) => {
+            if ((error as any).name === 'NonRetriableError') {
+              logger.error(`${this.name} non-retriable error:`, (error as any).originalError?.message || error.message);
+              return false;
+            }
+            return true;
           }
         }
       );
@@ -49,14 +57,19 @@ export abstract class BaseProvider implements LLMProvider {
         timestamp: new Date().toISOString()
       };
       
-    } catch (error) {
-      logger.error(`${this.name} query failed:`, error);
+    } catch (error: any) {
+      // NonRetriableError의 경우 원래 에러 메시지 사용
+      const errorMessage = error.name === 'NonRetriableError' 
+        ? (error.originalError?.message || error.message)
+        : (error instanceof Error ? error.message : "Unknown error");
+      
+      logger.error(`${this.name} query failed:`, errorMessage);
       
       return {
         provider: this.name,
         model: options?.model || this.defaultModel,
         content: "",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: errorMessage,
         latency: Date.now() - startTime,
         timestamp: new Date().toISOString()
       };
