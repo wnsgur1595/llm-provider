@@ -13,13 +13,16 @@ export function initializeProviders(config: Config): LLMProvider[] {
   // Initialize OpenAI
   if (config.openai.apiKey) {
     try {
-      providers.push(new OpenAIProvider(
-        config.openai.apiKey,
-        config.openai.model,
-        config.openai.temperature,
-        config.openai.maxTokens
-      ));
-      logger.info(`✅ OpenAI provider initialized with model: ${config.openai.model}`);
+      providers.push(new OpenAIProvider({
+        apiKey: config.openai.apiKey,
+        defaultModel: config.openai.model,
+        defaultTemperature: config.openai.temperature,
+        defaultMaxTokens: config.openai.maxTokens,
+        useProxy: config.openai.useProxy,
+        proxyUrl: config.openai.proxyUrl
+      }));
+      const proxyMode = config.openai.useProxy ? " (proxy mode)" : "";
+      logger.info(`✅ OpenAI provider initialized with model: ${config.openai.model}${proxyMode}`);
     } catch (error) {
       logger.error("Failed to initialize OpenAI provider:", error);
       skippedProviders.push("OpenAI");

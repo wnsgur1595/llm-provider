@@ -44,7 +44,9 @@ const ConfigSchema = z.object({
     apiKey: z.string().optional(),
     model: z.string().default("gpt-5"),
     temperature: z.number().default(0.7),
-    maxTokens: z.number().default(4096)
+    maxTokens: z.number().default(4096),
+    useProxy: z.boolean().default(false),
+    proxyUrl: z.string().default("http://localhost:3000")
   }),
   anthropic: z.object({
     apiKey: z.string().optional(),
@@ -105,7 +107,9 @@ export function loadConfig(): Config {
         apiKey: getApiKey('OPENAI_API_KEY'),
         model: getConfigValue('OPENAI_MODEL', "gpt-5"),
         temperature: getNumericConfigValue('OPENAI_TEMPERATURE', 0.7),
-        maxTokens: getNumericConfigValue('OPENAI_MAX_TOKENS', 4096)
+        maxTokens: getNumericConfigValue('OPENAI_MAX_TOKENS', 4096),
+        useProxy: getConfigValue('OPENAI_USE_PROXY', 'false') === 'true',
+        proxyUrl: getConfigValue('OPENAI_PROXY_URL', 'http://localhost:3000')
       },
       anthropic: {
         apiKey: getApiKey('ANTHROPIC_API_KEY'),
